@@ -24,6 +24,7 @@ publicVariable QGVAR(roundNumber);
         [] remoteExec [QFUNC(respawnPlayer),0,false];
         [] call FUNC(playzoneCleanup);
         [] call FUNC(setTimeAndDate);
+        [] call FUNC(setWeather);
 
     // move players to respawn position manually in first round
     } else {
@@ -49,8 +50,8 @@ publicVariable QGVAR(roundNumber);
     sleep 8;
 
     // preparation time is handled by mission setup in first round
-    if (GVAR(roundNumber) > 1) then {
-        [["PREPARATION_TIME", 0] call BIS_fnc_getParamValue,{
+    if (GVAR(roundNumber) > 1 || (["PREPARATION_TIME", 0] call BIS_fnc_getParamValue) == 0) then {
+        [(["PREPARATION_TIME", 0] call BIS_fnc_getParamValue) max 10,{
             missionNamespace setVariable [QGVAR(roundTimeLeft),GVAR(roundLength),true];
             missionNamespace setVariable [QGVAR(roundInProgress),true,true];
         }] call EFUNC(missionSetup,startPreparationTime);
